@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#d71920">
+  <title>J&T Express | Custo operacional</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="dados.js"></script>
+  <script defer src="painel.js"></script>
+</head>
+<body>
+<main id="jt-orlean-cost">
+  <header class="hero">
+    <div class="brand"><strong>J&amp;T EXPRESS</strong><span>REGIONAL ORLEAN</span></div>
+    <h1>Custo operacional</h1>
+    <p>Despesas, volume e custo por pacote por base e gestor.</p>
+  </header>
+  <nav class="viz-row tabs" aria-label="Visões do painel">
+    <button type="button" id="jt-show-operation" class="btn" aria-pressed="true" aria-controls="jt-operation">Custos operacionais</button>
+    <button type="button" id="jt-show-tariffs" class="btn" aria-pressed="false" aria-controls="jt-tariffs">Histórico de tarifas</button>
+  </nav>
+  <section id="jt-operation" aria-label="Custos operacionais">
+  <section class="panel filter-panel">
+    <div class="viz-row list-controls"><div><h2>Filtros operacionais</h2><p class="text-muted">Demonstração · dados fictícios</p></div><button id="jt-reset" type="button" class="btn">Limpar filtros</button></div>
+    <div class="viz-controls filters">
+    <label class="form-label">Gestor (S/C)<select id="jt-manager" class="form-select"><option value="">Todos os gestores</option></select></label>
+    <label class="form-label">Buscar base<input id="jt-base-search" class="form-control" type="search" placeholder="Ex. SMG"></label>
+  </div>
+  </section>
+  <div id="jt-summary" class="viz-grid" aria-live="polite"></div>
+  <div class="viz-row list-controls rank-heading"><h2>Maiores custos</h2>
+    <label class="form-label">Classificar por
+      <select id="jt-rank-metric" class="form-select">
+        <option value="cost">Custo total</option>
+        <option value="fixed">Fixo identificado</option>
+        <option value="rate">Custo por pacote</option>
+      </select>
+    </label>
+  </div>
+  <div class="rankings">
+    <section class="panel"><h3>Top 5 bases</h3><ol id="jt-rank-bases" aria-label="Ranking de bases"></ol></section>
+    <section class="panel"><h3>Top 5 gestores · Regional</h3><ol id="jt-rank-managers" aria-label="Ranking de gestores"></ol></section>
+  </div>
+  <section id="jt-base-detail" class="panel" hidden aria-live="polite"></section>
+  <section class="panel composition"><h2>Composição do custo</h2><div id="jt-composition"></div></section>
+  <button type="button" id="jt-analysis-toggle" class="btn" aria-expanded="false" aria-controls="jt-analysis">Ver análise completa</button>
+  <section id="jt-analysis" class="panel" hidden aria-label="Análise completa">
+  <div class="viz-row list-controls">
+    <h3>Custo por base</h3>
+    <button type="button" class="btn" id="jt-bases-all" aria-pressed="false" aria-controls="jt-base-rows">Ver todas as bases</button>
+  </div>
+  <div class="table-responsive" tabindex="0" role="region" aria-label="Tabela com rolagem">
+    <table class="table table-sm" aria-label="Custos por base">
+      <thead><tr><th scope="col">Base</th><th scope="col" class="text-end">Pacotes</th><th scope="col" class="text-end" data-order="3"><button type="button" class="btn btn-ghost">Custo total</button></th><th scope="col" class="text-end" data-order="4"><button type="button" class="btn btn-ghost">Fixo identificado</button></th><th scope="col" class="text-end" data-order="10"><button type="button" class="btn btn-ghost">R$/pacote</button></th></tr></thead>
+      <tbody id="jt-base-rows"></tbody>
+    </table>
+  </div>
+  <div class="viz-row pagination">
+    <button type="button" class="btn" id="jt-prev">Anterior</button><span id="jt-page" aria-live="polite"></span><button type="button" class="btn" id="jt-next">Próxima</button>
+  </div>
+  <h3>Custo por gestor</h3>
+  <div class="table-responsive" tabindex="0" role="region" aria-label="Tabela com rolagem">
+    <table class="table table-sm" aria-label="Custos por gestor">
+      <thead><tr><th scope="col">Gestor (S/C)</th><th scope="col" class="text-end">Bases</th><th scope="col" class="text-end">Custo total</th><th scope="col" class="text-end">Fixo identificado</th><th scope="col" class="text-end">R$/pacote</th></tr></thead>
+      <tbody id="jt-manager-rows"></tbody>
+    </table>
+  </div>
+  </section>
+  </section>
+  <section id="jt-tariffs" class="panel" aria-label="Histórico de tarifas" hidden>
+    <h3>Tarifas por base e faixa de peso</h3>
+    <div class="viz-controls filters">
+      <label class="form-label">Base<select id="jt-tariff-base" class="form-select"><option value="">Todas as bases</option></select></label>
+      <label class="form-label">Faixa de peso<select id="jt-tariff-weight" class="form-select"><option value="">Todas as faixas</option></select></label>
+    </div>
+    <div class="viz-row list-controls">
+      <p id="jt-tariff-summary" aria-live="polite"></p>
+      <button type="button" class="btn" id="jt-tariffs-all" aria-pressed="false" aria-controls="jt-tariff-rows">Ver todas as tarifas</button>
+    </div>
+    <div class="table-responsive" tabindex="0" role="region" aria-label="Tabela com rolagem">
+      <table class="table table-sm" aria-label="Tarifas registradas por mês">
+        <thead><tr><th scope="col">Base</th><th scope="col">Faixa de peso</th><th scope="col" class="text-end">Julho</th><th scope="col" class="text-end">Agosto</th><th scope="col" class="text-end">Setembro</th><th scope="col" class="text-end">Outubro</th><th scope="col" class="text-end">Variação jul. → out.</th></tr></thead>
+        <tbody id="jt-tariff-rows"></tbody>
+      </table>
+    </div>
+    <div class="viz-row pagination">
+      <button type="button" class="btn" id="jt-tariff-prev">Anterior</button><span id="jt-tariff-page" aria-live="polite"></span><button type="button" class="btn" id="jt-tariff-next">Próxima</button>
+    </div>
+  </section>
+</main>
+</body>
+</html>
