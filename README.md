@@ -1,17 +1,25 @@
 # J&T Express · Custo operacional
 
-Painel estático demonstrativo. Os registros em `dados.js` são fictícios. Abra `index.html` no navegador para usar localmente.
+Dashboard da regional Orlean em React e Vite.
+
+## Rodar localmente
+
+Use Node.js 22.12 ou superior.
+
+```bash
+npm ci
+npm run dev
+```
+
+Para gerar a versão de produção, execute `npm run build`.
 
 ## Render
 
-Crie um Static Site a partir da branch `main`. Use `mkdir -p dist && cp index.html style.css dados.js painel.js dist/` como Build Command e `dist` como Publish Directory.
+Configure um Static Site com a branch `main`, Build Command `npm ci && npm run build` e Publish Directory `dist`. Deixe o Root Directory em branco.
+O serviço já existente pode continuar copiando os quatro arquivos estáticos da raiz. Ao alterar o código, rode `npm run build` e copie `dist/index.html`, `dist/style.css`, `dist/dados.js` e `dist/painel.js` para a raiz antes do commit.
 
-## Indicadores
+## Dados
 
-- Custo total, volume, fixo identificado e custo por pacote.
-- Rankings por base e gestor, visão completa e detalhamento das rubricas.
-- Histórico de tarifas por base e faixa de peso.
-- Fixo identificado soma funcionários e aluguel. ADM aparece em rubrica separada.
-- Custo por pacote consolidado divide o custo registrado pelo volume das bases com custo informado.
+`src/dados.js` contém dados fictícios para a demonstração pública. Os valores monetários estão em centavos e `null` representa dado indisponível.
 
-Feito por Erison Neto – Analista de Dados Pleno.
+O fixo identificado reúne funcionários e aluguel. A fonte agrupa despesas administrativas sem discriminar internet, energia e água. O R$/pacote consolidado divide o custo registrado pelo volume das bases com custo informado. O histórico acompanha tarifas por faixa de peso.
