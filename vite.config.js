@@ -10,8 +10,7 @@ export default defineConfig({
       output: {
         entryFileNames: 'painel.js',
         chunkFileNames: '[name].js',
-        assetFileNames: 'style[extname]',
-        manualChunks: {'dados': ['./src/dados.js']},
+        assetFileNames: 'style[extname]'
       },
     },
   },

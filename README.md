@@ -1,25 +1,33 @@
-# J&T Express · Custo operacional
+# J&T Express · Custo Operacional (RM Orlean)
 
-Dashboard da regional Orlean em React e Vite.
+Dashboard React/Vite com consulta mensal a dados reais da JT API. O fechamento contábil por S/C e a estimativa tarifária parcial por base são apresentados separadamente para evitar dupla contagem.
 
-## Rodar localmente
+## API esperada
 
-Use Node.js 22.12 ou superior.
+GET /api/custo/competencias -> competencias: ["2026-10"]
 
-```bash
-npm ci
-npm run dev
-```
+GET /api/custo/indicadores?competencia=2026-10 -> competencia, total, gestores, bases.
 
-Para gerar a versão de produção, execute `npm run build`.
+Campos monetários são strings decimais em reais (não centavos); ausências devem vir como null, nunca como zero. Em total, custo_total é o custo informado por S/C. Em bases, custo_parcial_estimado considera SOMENTE Secundária + Mini Transferência + Last Mile.
 
-## Render
+## Auditoria 2026-10
 
-Configure um Static Site com a branch `main`, Build Command `npm ci && npm run build` e Publish Directory `dist`. Deixe o Root Directory em branco.
-O serviço já existente pode continuar copiando os quatro arquivos estáticos da raiz. Ao alterar o código, rode `npm run build` e copie `dist/index.html`, `dist/style.css`, `dist/dados.js` e `dist/painel.js` para a raiz antes do commit.
+8 lançamentos por S/C, 144 bases e 2.137.737 pacotes. Custo total fechado: R$ 11.579.958,66. Estimativa parcial das três rubricas por base: R$ 10.295.279,87. Não somar essas duas medidas. Lançamento diretamente atribuído a Orlean permanece regional, sem rateio para bases.
 
-## Dados
+## Execução
 
-`src/dados.js` contém dados fictícios para a demonstração pública. Os valores monetários estão em centavos e `null` representa dado indisponível.
+Node.js 22+, comandos: npm ci, npm run dev, npm run build.
 
-O fixo identificado reúne funcionários e aluguel. A fonte agrupa despesas administrativas sem discriminar internet, energia e água. O R$/pacote consolidado divide o custo registrado pelo volume das bases com custo informado. O histórico acompanha tarifas por faixa de peso.
+A URL padrão é /api/custo no MESMO domínio. Um gateway autenticado em domínio externo pode ser configurado no build por meio de VITE_CUSTO_API_URL=https://SEU-GATEWAY-SEGURO/api/custo. Não usar variáveis Vite para senhas, tokens ou chaves privadas: são embutidas no JS público.
+
+## Publicação
+
+O Render atual é um Static Site; ele não acessa automaticamente a VM. Para exibir dados reais é necessário gateway HTTPS autenticado com cookie de sessão e CORS adequadamente configurado, ou servir o painel no mesmo domínio da API autenticada. Se a API estiver ausente, o painel informa erro de consulta e não mostra dados de demonstração.
+
+NÃO fazer merge/deploy desta branch até executar migração, importar dados no PostgreSQL jt_indicadores, montar o router na JT API, ajustar a autenticação e validar as respostas.
+
+## Visões
+
+Ranking contábil por S/C; ranking parcial estimado por base; composição das rubricas; filtros de competência, S/C e base. Tarifas históricas só devem retornar quando fonte real de outros meses estiver integrada; o conjunto demonstrativo anterior não serve como histórico real.
+
+Feito por Erison Neto – Analista de Dados Pleno.
